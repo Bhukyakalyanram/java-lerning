@@ -130,6 +130,60 @@ public class LinkedLists {
 
     }
 
+    private Node getMid(Node head) {
+        Node slow = head;
+        Node fast = head.next;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    private Node merge(Node left, Node right) {
+        Node dummy = new Node(-1);
+        Node current = dummy;
+        while (left != null && right != null) {
+            if (left.data <= right.data) {
+                current.next = left;
+                left = left.next;
+                current = current.next;
+            } else {
+                current.next = right;
+                right = right.next;
+                current = current.next;
+            }
+        }
+
+        while (left != null) {
+            current.next = left;
+            left = left.next;
+            current = current.next;
+        }
+        while (right != null) {
+            current.next = right;
+            right = right.next;
+            current = current.next;
+        }
+
+        return dummy.next;
+    }
+
+    public Node Mergesort(Node Head) {
+        if (Head == null || Head.next == null) {
+            return Head;
+        }
+        Node mid = getMid(Head);
+
+        Node rightHead = mid.next;
+        mid.next = null;
+        Node newLeft = Mergesort(Head);
+        Node newRight = Mergesort(rightHead);
+
+        return merge(newLeft, newRight);
+    }
+
     public void Print() {
         Node temp = Head;
         while (temp != null) {
@@ -143,13 +197,19 @@ public class LinkedLists {
     public static void main(String args[]) {
         LinkedLists Li = new LinkedLists();
         Li.Addfirst(1);
-        Li.Addlast(2);
-        Li.Addmiddele(3, 1);
+        Li.Addfirst(2);
+        Li.Addfirst(3);
+        Li.Addfirst(4);
+        Li.Addfirst(5);
+        // Li.Addmiddele(3, 1);
         Li.Print();
         // Removefirst();
         // Li.Print();
         // Removelast();
         // Li.Print();
-        System.out.println(RecursiveSearch(3));
+        // System.out.println(RecursiveSearch(3));
+        Li.Head = Li.Mergesort(Li.Head);
+        Li.Print();
+
     }
 }
